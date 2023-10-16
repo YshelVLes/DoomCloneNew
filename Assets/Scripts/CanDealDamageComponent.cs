@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CanDealDamageComponent : MonoBehaviour
 {
-    [SerializeField] int damageAmout = 20;
+    [SerializeField] int damageAmout = 10;
 
     //нужно ли через пропертиз и его сделать? по идее он нужен лишь внутри этого компонента
     private GameObject overlapingActor = null;
@@ -16,21 +16,10 @@ public class CanDealDamageComponent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-      
-        if (other.gameObject.GetComponent<DamagableComponent>() != null)
-        {
-            overlapingActor = other.gameObject;
-        }
-        else return;
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject == overlapingActor)
-        {
-            StartCoroutine(DealDamageEverySecond());
-        }
-       
+        Debug.Log("entered");
+        //если нет компонента 
+        overlapingActor = other.gameObject;
+        DealDamage();
     }
 
     private void OnTriggerExit(Collider other)
@@ -43,21 +32,16 @@ public class CanDealDamageComponent : MonoBehaviour
 
     void DealDamage()
     {
-        if (overlapingActor != null && overlapingActor.GetComponent<DamagableComponent>() != null)
+       if( overlapingActor != null && overlapingActor.GetComponent<DamagableComponent>() != null)
         {
             overlapingActor.GetComponent<DamagableComponent>().Hp -= Damage;
             Debug.Log(overlapingActor.GetComponent<DamagableComponent>().Hp);
         }
-        else
+       else
         {
             Debug.Log("sth wrong");
         }
     }
 
-   IEnumerator DealDamageEverySecond()
-    {
-        DealDamage();
-        yield return new WaitForSeconds(1);
-        
-    }
+
 }

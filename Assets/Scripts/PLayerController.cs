@@ -5,10 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PLayerController : MonoBehaviour
 {
-    [SerializeField] float forwardForse= 1;
+ 
     //[SerializeField] float sideForse = 1; 
 
-    [SerializeField] float speed = 1;
+    [SerializeField] float speed = 10;
     //на сколько градусов в секунду поворачиваемся 
     [SerializeField] float sensitivity = 10;
 
@@ -18,6 +18,7 @@ public class PLayerController : MonoBehaviour
 
     Vector3 surfaceNormal;
 
+    //для гравитации 
     float verticalSpeed;
 
     private void Awake()
@@ -28,42 +29,79 @@ public class PLayerController : MonoBehaviour
 
     void Update()
     {
+
+        //float mouseX = Input.GetAxis("Mouse X");
+        //float horizontal = Input.GetAxis("Horizontal");
+        //float vertical = Input.GetAxis("Vertical");
+
+        Vector3 rotation = new Vector3(0, Input.GetAxis("Mouse X")) * sensitivity * Time.deltaTime;
+
+        transform.Rotate(rotation);
+
+        if(characterController.isGrounded)
+        {
+            verticalSpeed = -0.1f;
+        }
+        else
+        {
+            verticalSpeed += Physics.gravity.y * Time.deltaTime;
+        }
+
+        Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        input = Vector3.ClampMagnitude(input, 1);
+
+        Vector3 velocity = transform.TransformDirection(input);
+     
+
+        //quaternipn - математика поворота 
+        Quaternion slopeRotation =  Quaternion.FromToRotation(Vector3.up, surfaceNormal);
+        Vector3 adjustedVelocity= slopeRotation * velocity;
+
+        // if = ?, условия до и после : 
+        // -0 - это двигаемся мы вниз или вверх 
+        velocity = adjustedVelocity.y < 0 ? adjustedVelocity : velocity;
+        velocity.y += verticalSpeed;
+
+        characterController.Move(velocity * speed * Time.deltaTime);
+
+
+
+
+
         //GetAxisRaw - моментальная смена значений, GetAxis - cо смягчением
         
-        float mouseX = Input.GetAxis("Mouse X");
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+      
 
-        Vector3 moveDirection = new Vector3(horizontal, 0, vertical);
+        //Vector3 moveDirection = new Vector3(horizontal, 0, vertical);
 
-        //ограничиваем длину вектора, приравниваем к структуре moveDirection
-        moveDirection = Vector3.ClampMagnitude(moveDirection, 1);
-        moveDirection = transform.TransformDirection(moveDirection);
-        moveDirection = Vector3.ProjectOnPlane(moveDirection, surfaceNormal);
+        ////ограничиваем длину вектора, приравниваем к структуре moveDirection
+        //moveDirection = Vector3.ClampMagnitude(moveDirection, 1);
+        //moveDirection = transform.TransformDirection(moveDirection);
+        //moveDirection = Vector3.ProjectOnPlane(moveDirection, surfaceNormal);
 
         // даем знать о глобальных координатах и переводим в свои 
         //погуглить про трансформ вектор 
       
 
-        Debug.DrawLine(transform.position, transform.position + moveDirection * 2, Color.blue);
+        //Debug.DrawLine(transform.position, transform.position + moveDirection * 2, Color.blue);
 
-        //кручение вокруг конкретной оси
-        transform.Rotate(new Vector3(0, mouseX * sensitivity * Time.deltaTime, 0)); 
+        ////кручение вокруг конкретной оси
+        //transform.Rotate(new Vector3(0, mouseX * sensitivity * Time.deltaTime, 0)); 
 
         
 
-        if(characterController.isGrounded)
-        {
-            verticalSpeed = 0;
-        }
-        else
-        {
-            //9.8f - гравитационная постоянная 
-            verticalSpeed -= 9.8f * Time.deltaTime;
-        }
+        //if(characterController.isGrounded)
+        //{
+        //    verticalSpeed = 0;
+        //}
+        //else
+        //{
+        //    //9.8f - гравитационная постоянная 
+        //    verticalSpeed -= 9.8f * Time.deltaTime;
+        //}
 
         //Move не считает гравитацию, SimpleMove считает
-        characterController.Move((moveDirection * speed + Vector3.up * verticalSpeed) * Time.deltaTime);
+        //characterController.Move((moveDirection * speed + Vector3.up * verticalSpeed) * Time.deltaTime);
 
         
 
