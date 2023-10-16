@@ -21,6 +21,12 @@ public class PLayerController : MonoBehaviour
     //для гравитации 
     float verticalSpeed;
 
+    public float VerticalSpeed
+    {
+       get => verticalSpeed;
+        set { verticalSpeed = value; }
+    }
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -44,6 +50,7 @@ public class PLayerController : MonoBehaviour
         }
         else
         {
+          
             verticalSpeed += Physics.gravity.y * Time.deltaTime;
         }
 
