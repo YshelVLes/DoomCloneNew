@@ -41,11 +41,16 @@ public class DamagableComponent : MonoBehaviour
 
             currentHp = value;
 
-            if(currentHp <= 0)
+            if (currentHp <= 0)
             {
                 Die();
-            } 
+            }
         }
+    }
+
+    public int MaxHp
+    {
+        get => hp;
     }
 
     void Die()

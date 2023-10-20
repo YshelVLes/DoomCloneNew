@@ -12,6 +12,28 @@ public class PLayerController : MonoBehaviour
     //на сколько градусов в секунду поворачиваемся 
     [SerializeField] float sensitivity = 10;
 
+    GameObject floor;
+    GameObject Floor
+    {
+        get => floor;
+        set
+        {
+            if(floor != value)
+            {
+                if (floor != null)
+                    floor.SendMessage("OnCharacterExit",this, SendMessageOptions.DontRequireReceiver);
+
+               if(value != null)
+                    value.SendMessage("OnCharacterEnter",this, SendMessageOptions.DontRequireReceiver);
+            }
+               
+
+            floor = value;
+
+           
+        }
+    }
+
     CharacterController characterController;
 
     [SerializeField] GameObject cam;
@@ -30,6 +52,9 @@ public class PLayerController : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     //Менее точный для физики, которая будет обновляться в другой частоте кадров 
 
@@ -62,7 +87,11 @@ public class PLayerController : MonoBehaviour
 
         //quaternipn - математика поворота 
         Quaternion slopeRotation =  Quaternion.FromToRotation(Vector3.up, surfaceNormal);
-        Vector3 adjustedVelocity= slopeRotation * velocity;
+
+        Vector3 adjustedVelocity = slopeRotation * velocity;
+       
+
+        
 
         // if = ?, условия до и после : 
         // -0 - это двигаемся мы вниз или вверх 
@@ -72,12 +101,11 @@ public class PLayerController : MonoBehaviour
         characterController.Move(velocity * speed * Time.deltaTime);
 
 
+        GroundCheck();
+
+    //GetAxisRaw - моментальная смена значений, GetAxis - cо смягчением
 
 
-
-        //GetAxisRaw - моментальная смена значений, GetAxis - cо смягчением
-        
-      
 
         //Vector3 moveDirection = new Vector3(horizontal, 0, vertical);
 
@@ -88,14 +116,14 @@ public class PLayerController : MonoBehaviour
 
         // даем знать о глобальных координатах и переводим в свои 
         //погуглить про трансформ вектор 
-      
+
 
         //Debug.DrawLine(transform.position, transform.position + moveDirection * 2, Color.blue);
 
         ////кручение вокруг конкретной оси
         //transform.Rotate(new Vector3(0, mouseX * sensitivity * Time.deltaTime, 0)); 
 
-        
+
 
         //if(characterController.isGrounded)
         //{
@@ -110,7 +138,7 @@ public class PLayerController : MonoBehaviour
         //Move не считает гравитацию, SimpleMove считает
         //characterController.Move((moveDirection * speed + Vector3.up * verticalSpeed) * Time.deltaTime);
 
-        
+
 
         //проводим луч вниз от персонажа 
         //if(characterController.SimpleMove(moveDirection))
@@ -163,4 +191,19 @@ public class PLayerController : MonoBehaviour
         //Debug.DrawLine(transform.position, transform.position +  )
 
     }
+
+   void GroundCheck()
+    {
+        if (Physics.Linecast(transform.position, transform.position + Vector3.down * (characterController.height / 2 + 0.1f), out RaycastHit hit))
+        {
+
+            Floor = hit.collider.gameObject;
+            Floor.SendMessage("OnCharacterStay",this, SendMessageOptions.DontRequireReceiver);
+
+        }
+        else Floor = null;
+      
+    }
+
+    
 }

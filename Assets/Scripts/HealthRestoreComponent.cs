@@ -12,20 +12,17 @@ public class HealthRestoreComponent : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (other.gameObject.GetComponent<DamagableComponent>() != null && other.gameObject.GetComponent<PLayerController>() != null)
+        if (other.gameObject.GetComponent<DamagableComponent>() != null 
+            && other.gameObject.GetComponent<PLayerController>() != null 
+            && overlapingActor.GetComponent<DamagableComponent>().Hp >  overlapingActor.GetComponent<DamagableComponent>().MaxHp)
         {
             overlapingActor = other.gameObject;
+            //не чекать еще раз компонент и TryGetComponent 
             overlapingActor.GetComponent<DamagableComponent>().Hp += Heal;
             Destroy(this.gameObject);
         }
-        else return;
+       
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject == overlapingActor)
-        {
-            overlapingActor = null;
-        }
-    }
+   
 }
