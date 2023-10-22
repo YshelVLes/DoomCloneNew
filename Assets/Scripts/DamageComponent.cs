@@ -8,43 +8,40 @@ public class DamageComponent : MonoBehaviour
 
     //нужно ли через пропертиз и его сделать? по идее он нужен лишь внутри этого компонента
     
-
-    private DamagableComponent damagableComponent; 
-
+   
     public int Damage
     {
         get => damageAmout;
     }
 
-    private void OnTriggerEnter(Collider other)
+
+    private void OnCharacterEnter(PLayerController controller)
     {
-        Debug.Log("entered");
-        //если нет компонента 
-        other.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent damagable);
-        damagableComponent = damagable;
+        
+    }
 
-        Debug.Log(damagableComponent);
+    private void OnCharacterStay(PLayerController controller)
+    {
 
+    }
+
+    private void OnCharacterExit(PLayerController controller)
+    {
+        
+    }
+
+
+    public void DealDamage(DamagableComponent damagable)
+    {
        
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-      
-    }
-
-    IEnumerator DealDamage()
-    {
-        yield return new WaitForSeconds(0);
-
-       if(damagableComponent != null)
+       if(damagable != null)
         {
-            damagableComponent.Hp -= Damage;
-           
+            damagable.Hp -= Damage;
+            Debug.Log(damagable.Hp);   
         }
        else
         {
-            Debug.Log("sth wrong");
+            //Debug.Log("sth wrong");
         }
     }
 
