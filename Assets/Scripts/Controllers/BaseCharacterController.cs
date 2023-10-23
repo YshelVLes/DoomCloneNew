@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseCharacterController : MonoBehaviour
+[RequireComponent(typeof(CharacterController))]
+public abstract class BaseCharacterController : MonoBehaviour
 {
     [SerializeField] float speed = 10;
-    [SerializeField] GameObject cam;
+    //[SerializeField] GameObject cam;
 
 
     Vector3 surfaceNormal;
