@@ -36,9 +36,12 @@ public class Elevator : MonoBehaviour
 
     private void OnCharacterExit(PLayerController controller)
     {
-        if (controller != null)
+        if (controller == null)
         {
-            StopCoroutine(nameof(MoveElevator));
+            if(Vector3.Distance(transform.position, target.position) > 0.01f)
+            {
+                StopCoroutine(nameof(MoveElevator));
+            }
             controller.gameObject.transform.parent = null;
         }
     }
