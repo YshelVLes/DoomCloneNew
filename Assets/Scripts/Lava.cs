@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lava : DamageComponent
+public class Lava : HealthManager
 {
     private DamagableComponent damagableComponent;
 
+    [SerializeField] int damage;
 
     void OnCharacterStay(PLayerController controller)
     {
@@ -28,11 +29,8 @@ public class Lava : DamageComponent
 
     void LavaDamage()
     {
-        DealDamage(damagableComponent);
+        DealDamage(damagableComponent, damage);
     }
 
-    void FindDamagable()
-    {
-
-    }
+   
 }
