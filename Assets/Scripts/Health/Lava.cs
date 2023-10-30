@@ -10,7 +10,7 @@ public class Lava : HealthManager
 
     void OnCharacterStay(PLayerController controller)
     {
-        //print($"lava: {controller.name}");
+       // print($"lava: {damagableComponent}");
 
     }
 
@@ -18,7 +18,7 @@ public class Lava : HealthManager
     {
         controller.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent damagable);
         damagableComponent = damagable;
-        InvokeRepeating(nameof(LavaDamage), 0, 1);
+        InvokeRepeating(nameof(LavaDamage), 1, 1);
     }
 
     void OnCharacterExit()

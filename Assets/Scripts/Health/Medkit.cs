@@ -11,7 +11,7 @@ public class Medkit : HealthManager
 
         void OnCharacterStay(PLayerController controller)
         {
-            //print($"lava: {controller.name}");
+            print($"lava: {controller.name}");
 
         }
 
@@ -23,7 +23,6 @@ public class Medkit : HealthManager
             Destroy(this.gameObject);
 
         }
-
         void OnCharacterExit()
         {
             damagableComponent = null;
