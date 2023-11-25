@@ -8,6 +8,10 @@ public class DamagableComponent : MonoBehaviour
     // поля с маленькой буквы 
     [SerializeField] int hp = 100;
 
+    [SerializeField] Affiliation affiliation;
+
+    public Affiliation Affiliation => affiliation;
+
     int currentHp;
 
     bool isDead;

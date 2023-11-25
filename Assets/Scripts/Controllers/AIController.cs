@@ -1,30 +1,66 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum MoveToCompletedReason
+{
+    Succsess,
+    Failure, 
+    Aborted
+}
+
+[RequireComponent(typeof(AISense))]
 public class AIController : BaseCharacterController
 {
     bool isMoveToCompleted = true;
+    AISense sence;
     NavMeshPath path;
     int pathPointIndex;
+
+    public AISense Sence => sence;
+
+    Action<MoveToCompletedReason> moveToCompleted;
 
     protected override void Awake()
     {
         base.Awake();
+        sence = GetComponent<AISense>();
         path = new NavMeshPath();
     }
 
-    protected bool MoveTo(Vector3 targetPos)
+    public bool MoveTo(Vector3 targetPos, Action<MoveToCompletedReason> completed = null)
     {
+      AbortMoveTo();
+
+      moveToCompleted = completed;
+
       bool hasPath =  NavMesh.CalculatePath(transform.position, targetPos, NavMesh.AllAreas, path);
 
-    if(hasPath)
+    if (hasPath)
+        {
+            if(path.corners.Length == 1)
+            {
+                InvokeMoveToCompleted(MoveToCompletedReason.Succsess);
+                return true;
+            }
             pathPointIndex = 1;
-  
-        isMoveToCompleted = !hasPath;
+        }
+          
 
-      return hasPath;
+        isMoveToCompleted = false;
+
+    if(!hasPath)
+            // "?." - можно ли сделать то, что идет дальше 
+            InvokeMoveToCompleted(MoveToCompletedReason.Failure);
+
+        return hasPath;
+    }
+
+    public void AbortMoveTo()
+    {
+        InvokeMoveToCompleted(MoveToCompletedReason.Aborted);
     }
 
     protected virtual void Update()
@@ -50,8 +86,7 @@ public class AIController : BaseCharacterController
         {
             if(pathPointIndex + 1 >= path.corners.Length)
             {
-                isMoveToCompleted = true;
-                print("Done");
+                InvokeMoveToCompleted(MoveToCompletedReason.Succsess);
                 return;
                 
             }
@@ -62,6 +97,16 @@ public class AIController : BaseCharacterController
 
         Vector3 direction = (targetPos - soursePos).normalized;
 
+        SetRotation(Quaternion.LookRotation(direction, transform.up).eulerAngles.y);
         MoveWorld(direction.x, direction.z);
+    }
+
+    void InvokeMoveToCompleted(MoveToCompletedReason reason)
+    {
+        isMoveToCompleted = true;
+
+        Action<MoveToCompletedReason> action = moveToCompleted;
+        moveToCompleted = null;
+        action?.Invoke(reason);
     }
 }

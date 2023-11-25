@@ -120,5 +120,10 @@ public abstract class BaseCharacterController : MonoBehaviour
 
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
+
 
 }

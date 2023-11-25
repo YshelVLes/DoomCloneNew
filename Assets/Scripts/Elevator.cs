@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Elevator : MonoBehaviour
 {
-   
-    private GameObject overlapingActor = null;
 
     private float verticalSpeed;
 
