@@ -16,8 +16,10 @@ public class Elevator : MonoBehaviour
 
     [SerializeField] private bool up = false;
 
+    public float LerpSpeed = 0.5f;
 
-    private void OnCharacterEnter(PLayerController controller)
+
+    private void OnCharacterEnter(BaseCharacterController controller)
     {
         if (controller != null)
         {
@@ -27,12 +29,12 @@ public class Elevator : MonoBehaviour
 
     }
 
-    private void OnCharacterStay(PLayerController controller)
+    private void OnCharacterStay(BaseCharacterController controller)
     {
        
     }
 
-    private void OnCharacterExit(PLayerController controller)
+    private void OnCharacterExit(BaseCharacterController controller)
     {
         if (controller == null)
         {
@@ -58,7 +60,7 @@ public class Elevator : MonoBehaviour
 
         while (Vector3.Distance(transform.position, target.position) > 0.01f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, target.position, speed * Time.deltaTime * LerpSpeed);
             up = !up;
             yield return up;
         }

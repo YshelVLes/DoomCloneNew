@@ -14,6 +14,8 @@ public class AttachToObject : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] int startPoint;
     [SerializeField] Transform[] points;
+    [SerializeField] float lerpnumber;
+
 
     int i; //
     bool reverse; //поднимается или опускается
@@ -49,7 +51,7 @@ public class AttachToObject : MonoBehaviour
 
         if (ableMove)
         {//двигает платформу к точке
-            transform.position = Vector3.MoveTowards(transform.position, points[i].position, speed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, points[i].position, speed * Time.deltaTime * lerpnumber);
         }
     }
 

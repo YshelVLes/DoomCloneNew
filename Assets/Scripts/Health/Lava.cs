@@ -2,35 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lava : HealthManager
+public class Lava : MonoBehaviour
 {
     private DamagableComponent damagableComponent;
 
     [SerializeField] int damage;
 
-    void OnCharacterStay(PLayerController controller)
+    public int Damage => damage;
+
+    private ArrayList damagables = new ArrayList();
+
+    void OnCharacterStay(BaseCharacterController controller)
     {
-       // print($"lava: {damagableComponent}");
+        //print($"lava: {damagableComponent}");
+    }
+
+    void OnCharacterEnter(BaseCharacterController controller)
+    {
+        if (damagables.Contains(controller) == false)
+        {
+            damagables.Add(controller);
+        }
+        
+        foreach(BaseCharacterController damagable in damagables)
+        {
+            if(damagable.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent damagableComponent))
+            {
+                Debug.Log("happend");
+                StartCoroutine(nameof(LavaDamage), damagableComponent); 
+            }
+        }
 
     }
 
-    void OnCharacterEnter(PLayerController controller)
+    void OnCharacterExit(BaseCharacterController controller)
     {
-        controller.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent damagable);
-        damagableComponent = damagable;
-        InvokeRepeating(nameof(LavaDamage), 1, 1);
+        if (damagables.Contains(controller))
+        {
+            if (controller.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent damagableComponent))
+            {
+                Debug.Log("exit");
+                StopCoroutine(nameof(LavaDamage));
+            }
+
+            damagables.Remove(controller);
+        }
     }
 
-    void OnCharacterExit()
+    IEnumerator LavaDamage(DamagableComponent damagableComponent)
     {
-        CancelInvoke(nameof(LavaDamage));
-        damagableComponent = null;
+        yield return new WaitForSeconds(1);
+        damagableComponent.Hp -= Damage;
+        Debug.Log($"{damagableComponent.gameObject.name} current HP = {damagableComponent.Hp}");
     }
 
-    void LavaDamage()
-    {
-        DealDamage(damagableComponent, damage);
-    }
-
-   
 }
