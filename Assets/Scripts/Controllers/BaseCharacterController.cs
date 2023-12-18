@@ -6,8 +6,6 @@ using UnityEngine;
 public abstract class BaseCharacterController : MonoBehaviour
 {
     [SerializeField] float speed = 10;
-    //[SerializeField] GameObject cam;
-
 
     Vector3 surfaceNormal;
     CharacterController characterController;
@@ -102,8 +100,6 @@ public abstract class BaseCharacterController : MonoBehaviour
         Debug.DrawLine(hit.point, hit.point + hit.normal * 10, Color.red);
 
         surfaceNormal = hit.normal;
-
-        //Debug.DrawLine(transform.position, transform.position +  )
 
     }
 
