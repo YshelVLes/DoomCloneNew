@@ -13,8 +13,6 @@ public static class Coroutines
 
     public static void StartCoroutine(IEnumerator coroutine)
     {
-        //ленивая инициализация :) 
-
         if(coroutinesRunner == null)
         {
             coroutinesRunner = new GameObject("CoroutinesRunner")
