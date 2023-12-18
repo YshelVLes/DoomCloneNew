@@ -31,7 +31,6 @@ public class RoamingAIState : AIState
         }
     }
 
-    //Handle - обработчик, а не просто функция 
     void HandleMoveToCompleted(MoveToCompletedReason reason)
     {
         if(reason != MoveToCompletedReason.Succsess)
