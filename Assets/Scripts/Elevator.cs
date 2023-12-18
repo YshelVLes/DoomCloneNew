@@ -36,14 +36,11 @@ public class Elevator : MonoBehaviour
 
     private void OnCharacterExit(BaseCharacterController controller)
     {
-        if (controller == null)
+        if(Vector3.Distance(transform.position, target.position) > 0.01f)
         {
-            if(Vector3.Distance(transform.position, target.position) > 0.01f)
-            {
-                StopCoroutine(nameof(MoveElevator));
-            }
-            controller.gameObject.transform.parent = null;
+           StopCoroutine(nameof(MoveElevator));
         }
+           controller.gameObject.transform.parent = null;
     }
 
     IEnumerator MoveElevator()
@@ -62,7 +59,7 @@ public class Elevator : MonoBehaviour
         {
             transform.position = Vector3.Lerp(transform.position, target.position, speed * Time.deltaTime * LerpSpeed);
             up = !up;
-            yield return up;
+            yield return up; 
         }
 
     }

@@ -37,15 +37,19 @@ public class Lava : MonoBehaviour
 
     void OnCharacterExit(BaseCharacterController controller)
     {
+
         if (damagables.Contains(controller))
         {
-            if (controller.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent damagableComponent))
+            foreach(BaseCharacterController damagable in damagables)
             {
-                Debug.Log("exit");
-                StopCoroutine(nameof(LavaDamage));
-            }
+                if (controller.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent damagableComponent))
+                {
+                    Debug.Log("exit");
+                    StopCoroutine(nameof(LavaDamage));
+                }
 
-            damagables.Remove(controller);
+                damagables.Remove(controller);
+            }
         }
     }
 
