@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AIStateMachine
 {
-   //Доступ к значению через ключ 
    Dictionary<string, AIState> States { get; }
 
     AIState activeState;
