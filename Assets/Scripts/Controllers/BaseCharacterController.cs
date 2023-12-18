@@ -97,7 +97,7 @@ public abstract class BaseCharacterController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        //hit.normal - íîðìàëèçîâàííûé âåêòîð 
+       
 
         Debug.DrawLine(hit.point, hit.point + hit.normal * 10, Color.red);
 
