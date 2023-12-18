@@ -52,7 +52,7 @@ public class AIController : BaseCharacterController
         isMoveToCompleted = false;
 
     if(!hasPath)
-            // "?." - можно ли сделать то, что идет дальше 
+
             InvokeMoveToCompleted(MoveToCompletedReason.Failure);
 
         return hasPath;
