@@ -97,7 +97,7 @@ public abstract class BaseCharacterController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        //hit.normal - нормализованный вектор 
+        //hit.normal - Г­Г®Г°Г¬Г Г«ГЁГ§Г®ГўГ Г­Г­Г»Г© ГўГҐГЄГІГ®Г° 
 
         Debug.DrawLine(hit.point, hit.point + hit.normal * 10, Color.red);
 
@@ -119,11 +119,5 @@ public abstract class BaseCharacterController : MonoBehaviour
         else Floor = null;
 
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
-
 
 }
