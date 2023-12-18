@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class DamagableComponent : MonoBehaviour
 {
-    //Сериализуемый - сохраненный где-то, изменяемый 
-    // поля с маленькой буквы 
     [SerializeField] int hp = 100;
 
     [SerializeField] Affiliation affiliation;
@@ -32,9 +30,7 @@ public class DamagableComponent : MonoBehaviour
     }
 
     public bool IsDead => isDead;
-    // 
 
-    //проперти с большой
     public int Hp
     {
         get => currentHp;
@@ -59,7 +55,6 @@ public class DamagableComponent : MonoBehaviour
 
     void Die()
     {
-        //$ - интерпаляция строк, {} - параметр 
         Debug.Log($"{gameObject.name} is dead");
         isDead = true;
     }
